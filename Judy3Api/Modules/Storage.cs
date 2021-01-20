@@ -45,8 +45,6 @@ namespace Judy.Modules
             }
         }
 
-
-
         
         public Property CreateProperty(Property p)
         {
@@ -72,8 +70,6 @@ namespace Judy.Modules
                 }
             }
         }
-
-        
         public Property CreateProperty(string addr, string responseMessage)
         {
             Property p = new Property
@@ -85,7 +81,6 @@ namespace Judy.Modules
 
             return CreateProperty(p);
         }
-
         public Property GetProperty(int id)
         {
             using (var con = GetConnection())
@@ -111,7 +106,6 @@ namespace Judy.Modules
                 }
             }
         }
-
         public List<Property> GetProperties()
         {
             using (var con = GetConnection())
@@ -138,7 +132,6 @@ namespace Judy.Modules
                 }
             }
         }
-        
         public bool UpdateProperty(Property p)
         {
             using (var con = GetConnection())
@@ -182,7 +175,6 @@ namespace Judy.Modules
                 }
             }
         }
-
         public Person CreatePerson(string name, string phone, string email)
         {
             Person p = new Person
@@ -195,7 +187,6 @@ namespace Judy.Modules
 
             return CreatePerson(p);
         }
-
         public Person GetPerson(int id)
         {
             using (var con = GetConnection())
@@ -245,7 +236,22 @@ namespace Judy.Modules
                 }
             }
         }
+        public bool UpdatePerson(Person p)
+        {
+            using (var con = GetConnection())
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand("UPDATE properties SET Name = @name, Phone = @phone, Email = @email, InquiryIds = @inq WHERE Id = @id", con))
+                {
+                    cmd.Parameters.AddWithValue("@name", p.Name);
+                    cmd.Parameters.AddWithValue("@phone", p.Phone);
+                    cmd.Parameters.AddWithValue("@email", p.Email);
+                    cmd.Parameters.AddWithValue("@inq", JsonConvert.SerializeObject(p.InquiryIds));
+                    cmd.Parameters.AddWithValue("@id", p.Id);
 
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
 
 
         public Inquiry CreateInquiry(Inquiry i)
@@ -281,7 +287,6 @@ namespace Judy.Modules
                 }
             }
         }
-
         public Inquiry CreateInquiry(string msg, int propId, int perId)
         {
             Inquiry i = new Inquiry()
@@ -292,7 +297,6 @@ namespace Judy.Modules
             };
             return CreateInquiry(i);
         }
-
         public Inquiry GetInquiry(int id)
         {
             using (var con = GetConnection())
