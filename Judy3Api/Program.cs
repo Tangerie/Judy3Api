@@ -24,7 +24,14 @@ namespace Judy
             Storage.CreateInstance("judy.db");
             Console.WriteLine($"Database Intialized (SQLite {Storage.Instance.GetVersion()}) at {Storage.Instance.DatabaseLocation}");
 
-            CreateHostBuilder(args).Build().Run();
+            Property p = Storage.Instance.GetProperty(1);
+            Console.WriteLine(JsonConvert.SerializeObject(p, Formatting.Indented));
+            p.Address = "68 Hampden Avenue";
+            bool w = Storage.Instance.UpdateProperty(p);
+            Console.WriteLine(w);
+
+
+            //CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
